@@ -15,7 +15,7 @@ export default function SimUnlock() {
 
   // 🔹 Fetch current SIM status when page loads
   useEffect(() => {
-    // 🔗 Fetches from the live Render URL: https://nokia-gateway-simulator.onrender.com/api/status
+    // 🔗 Fetches from the live Render URL: https://mock-backend-jc6v.onrender.com/api/status
     fetch(`${API_URL}/api/status`)
       .then((res) => res.json())
       .then((data) => {
@@ -30,7 +30,7 @@ export default function SimUnlock() {
     e.preventDefault();
     setMessage("Processing...");
     try {
-      // 🔗 Posts to the live Render URL: https://nokia-gateway-simulator.onrender.com/api/sim/unlock
+      // 🔗 Posts to the live Render URL: https://mock-backend-jc6v.onrender.com/api/sim/unlock
       const res = await fetch(`${API_URL}/api/sim/unlock`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
