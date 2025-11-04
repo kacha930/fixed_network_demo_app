@@ -22,7 +22,9 @@ CORRECT_PUK = "12345678"
 # ---------------------------------------------
 # LOAD GATEWAY CREDENTIALS (for Sign-In)
 # ---------------------------------------------
-CREDENTIALS_FILE = os.path.join(os.path.dirname(__file__), "gateway_credentials.json")
+# CREDENTIALS_FILE = os.path.join(os.path.dirname(__file__), "gateway_credentials.json")
+# NEW (Simplified)
+CREDENTIALS_FILE = "gateway_credentials.json"
 
 def load_credentials():
     try:
