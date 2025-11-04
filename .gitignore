@@ -1,0 +1,11 @@
+
+/frontend/node_modules
+/frontend/dist
+/frontend/build
+/backend/venv
+.venv
+.env
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+

@@ -1,0 +1,186 @@
+/* Dashboard.css */
+
+/* 🌙 App container (mobile layout) */
+.dashboard-container {
+  background: linear-gradient(180deg, #02123b, #030a1a);
+  color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "Inter", sans-serif;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  max-width: 420px; /* ✅ mimic mobile screen width */
+  border-radius: 28px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+}
+
+/* ⚠️ Popup banner */
+.popup-banner {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  max-width: 380px;
+  z-index: 999;
+  background: rgba(13, 28, 70, 0.92);
+  border: 1px solid rgba(80, 160, 255, 0.4);
+  border-radius: 18px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  animation: slideDown 0.6s ease-out;
+}
+
+/* 🔔 Popup inner layout */
+.popup-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  gap: 10px;
+}
+
+.popup-content p {
+  flex: 1;
+  font-size: 13px;
+  color: #d7e4ff;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.popup-content .highlight {
+  color: #5da8ff;
+  font-weight: 500;
+}
+
+.popup-content button {
+  background: linear-gradient(135deg, #1e73ff, #3b8bff);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.popup-content button:hover {
+  background: linear-gradient(135deg, #3b8bff, #65a6ff);
+  transform: scale(1.05);
+}
+
+/* 🪄 Popup entry animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* 🏠 Header styling */
+.dashboard-header {
+  text-align: center;
+  margin-top: 80px;
+}
+
+.dashboard-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.dashboard-header p {
+  font-size: 13px;
+  color: #a0b9e0;
+  margin-top: 6px;
+}
+
+/* 💬 Main content area */
+.dashboard-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.dashboard-content h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.dashboard-content p {
+  font-size: 14px;
+  color: #a8b6d1;
+}
+
+/* 🧭 Bottom Navigation */
+.dashboard-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(10, 28, 69, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 10px 0;
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px 24px 0 0;
+}
+
+.dashboard-nav button {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.dashboard-nav button span {
+  font-size: 18px;
+}
+
+.dashboard-nav button:hover {
+  transform: scale(1.05);
+  color: #66aaff;
+}
+
+.dashboard-nav .active {
+  color: #5da8ff;
+  font-weight: 600;
+}
+
+.dashboard-nav .logout {
+  color: #ff6b6b;
+}
+
+/* ✨ Smooth fade animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-content,
+.dashboard-header {
+  animation: fadeInUp 0.8s ease forwards;
+}

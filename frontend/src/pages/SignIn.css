@@ -1,0 +1,92 @@
+/* SignIn.css */
+
+/* General layout */
+.signin-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(160deg, #003366, #004c99);
+  font-family: "Poppins", sans-serif;
+  padding: 20px;
+  text-align: center;
+  color: white;
+}
+
+/* Header title */
+.signin-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+/* Card styling */
+.signin-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 340px;
+  backdrop-filter: blur(6px);
+}
+
+/* Form elements */
+.signin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.signin-input {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  outline: none;
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.signin-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.signin-input:focus {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Button */
+.signin-button {
+  background: #00aaff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.signin-button:hover {
+  background: #0090dd;
+  transform: scale(1.03);
+}
+
+/* Error text */
+.signin-error {
+  color: #ff6b6b;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+/* Footer */
+.signin-footer {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-top: 20px;
+}

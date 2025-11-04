@@ -1,0 +1,119 @@
+/* General Layout */
+.simunlock-page {
+  height: 100vh;
+  background: linear-gradient(to bottom right, #f2f6fb, #ffffff);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Header */
+.simunlock-header {
+  width: 90%;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #003366;
+  margin-bottom: 25px;
+}
+
+.simunlock-header h2 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #003366;
+}
+
+.nokia-logo {
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: #0078d7;
+  letter-spacing: 0.5px;
+}
+
+/* Card Container */
+.simunlock-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  padding: 25px 30px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.simunlock-card h3 {
+  color: #0078d7;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+/* Overview Rows */
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.status-row strong {
+  color: #0078d7;
+}
+
+/* PIN Form */
+.pin-form {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pin-form label {
+  font-size: 0.9rem;
+  color: #555;
+  text-align: left;
+}
+
+.pin-form input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.pin-form input:focus {
+  border-color: #0078d7;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 120, 215, 0.3);
+}
+
+.pin-form button {
+  margin-top: 5px;
+  background: #0078d7;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pin-form button:hover {
+  background: #005fa3;
+  transform: scale(1.02);
+}
+
+/* Message */
+.message {
+  margin-top: 15px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #333;
+}
