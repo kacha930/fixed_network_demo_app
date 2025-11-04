@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import "./SignIn.css"; // ✅ Import external CSS file
+import "./SignIn.css"; 
+
+// 🚀 Use the environment variable for the live backend URL
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function SignIn() {
   const [username, setUsername] = useState("");
@@ -13,7 +16,8 @@ export default function SignIn() {
     e.preventDefault();
     setError("");
     try {
-      const res = await fetch("/api/login", {
+      // ✅ CORRECTED: Using the full API_URL
+      const res = await fetch(`${API_URL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -26,7 +30,8 @@ export default function SignIn() {
         setError(data.message || "Invalid credentials");
       }
     } catch (err) {
-      setError("Backend not reachable");
+      // Updated error message for better clarity in a live environment
+      setError("⚠️ Backend not reachable. Check network or service status.");
     }
   }
 
