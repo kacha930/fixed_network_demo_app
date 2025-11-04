@@ -8,3 +8,8 @@ Render_frontend
 
 
 backend is successfully deployed and running on ```https://nokia-gateway-simulator.onrender.com```
+
+Setting	Value	Notes
+Name	nokia-gateway-simulator-frontend (or similar)	A descriptive name.
+Build Command	npm install && npm run build	Standard React build process.
+Publish Directory	build (or dist if using Vite)	This tells Render where to find the static files after the build.
