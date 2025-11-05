@@ -3,9 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SimUnlock.css";
 
-// 🚀 Use the environment variable for the backend URL
-const API_URL = process.env.REACT_APP_API_URL;
-
 export default function SimUnlock() {
   const [pin, setPin] = useState("");
   const [message, setMessage] = useState("");
@@ -15,14 +12,13 @@ export default function SimUnlock() {
 
   // 🔹 Fetch current SIM status when page loads
   useEffect(() => {
-    // 🔗 Fetches from the live Render URL: https://mock-backend-jc6v.onrender.com/api/status
-    fetch(`${API_URL}/api/status`)
+    fetch("http://localhost:5000/api/status")
       .then((res) => res.json())
       .then((data) => {
         setSimStatus(data.sim_status);
         setConnection(data.connection);
       })
-      .catch(() => setMessage("⚠️ Unable to reach backend API. Check URL and CORS settings."));
+      .catch(() => setMessage("⚠️ Unable to reach backend API."));
   }, []);
 
   // 🔹 Handle PIN submission to Flask API
@@ -30,8 +26,7 @@ export default function SimUnlock() {
     e.preventDefault();
     setMessage("Processing...");
     try {
-      // 🔗 Posts to the live Render URL: https://mock-backend-jc6v.onrender.com/api/sim/unlock
-      const res = await fetch(`${API_URL}/api/sim/unlock`, {
+      const res = await fetch("http://localhost:5000/api/sim/unlock", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pin }),
@@ -51,7 +46,7 @@ export default function SimUnlock() {
         setMessage("❌ " + data.message);
       }
     } catch (err) {
-      setMessage("⚠️ Network error. Check your network or the backend service status.");
+      setMessage("⚠️ Network error. Check if Flask is running on port 5000.");
     }
   };
 
@@ -76,7 +71,7 @@ export default function SimUnlock() {
       <form className="pin-form" onSubmit={handleSubmit}>
         <input
           type="password"
-          placeholder="Enter SIM PIN"
+          placeholder="Enter PIN"
           value={pin}
           onChange={(e) => setPin(e.target.value)}
           required

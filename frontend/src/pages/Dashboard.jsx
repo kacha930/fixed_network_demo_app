@@ -3,9 +3,6 @@ import React, { useState, useEffect } from "react";
 import Popup from "../components/Popup";
 import "./Dashboard.css";
 
-// 🚀 Define API_URL using the environment variable
-const API_URL = process.env.REACT_APP_API_URL; 
-
 export default function Dashboard() {
   const [showPopup, setShowPopup] = useState(false);
   const [activeTab, setActiveTab] = useState("home");
@@ -17,12 +14,8 @@ export default function Dashboard() {
 
   // 🔹 Fetch real backend status on load & manage initial popup
   useEffect(() => {
-    // 🔗 Fetches from the live Render URL
-    fetch(`${API_URL}/api/status`) 
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch status");
-        return res.json();
-      })
+    fetch("http://localhost:5000/api/status")
+      .then((res) => res.json())
       .then((data) => {
         setStatus(data);
 
@@ -34,12 +27,9 @@ export default function Dashboard() {
           return () => clearTimeout(timer);
         }
       })
-      .catch((err) => {
-        // More descriptive error message for the console
-        console.error("Could not fetch status from API:", err); 
-        // Optional: Update state to show connection failure to user
-        setStatus({ sim_status: "Error", connection: "API Down" });
-      });
+      .catch((err) => console.error("Could not fetch status:", err));
+    // The cleanup for setTimeout is inside the success branch,
+    // so we only return a cleanup function if the timer is set.
   }, []);
 
   // 🔹 Check if redirected after unlock success
@@ -47,7 +37,7 @@ export default function Dashboard() {
     if (localStorage.getItem("connectionSuccess") === "true") {
       setShowSuccess(true);
       localStorage.removeItem("connectionSuccess");
-      // Hide the success banner after 4 seconds
+      // Hide the success banner after 7 seconds
       const timer = setTimeout(() => setShowSuccess(false), 4000);
       return () => clearTimeout(timer);
     }
@@ -75,15 +65,7 @@ export default function Dashboard() {
 
       <div className="dashboard-content">
         <h2>Welcome Home</h2>
-        {/* Display Status */}
-        <div className="status-display">
-          <p>
-            <strong>SIM Status:</strong> {status.sim_status}
-          </p>
-          <p>
-            <strong>Connection:</strong> {status.connection}
-          </p>
-        </div>
+        
       </div>
 
       <nav className="dashboard-nav">

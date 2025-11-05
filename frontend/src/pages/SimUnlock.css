@@ -1,18 +1,19 @@
-/* General Layout */
-.simunlock-page {
-  height: 100vh;
-  background: linear-gradient(to bottom right, #f2f6fb, #ffffff);
+/* Page Container - centers everything */
+.simunlock-container {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-top: 40px;
+  justify-content: center; /* Vertical center */
+  align-items: center;     /* Horizontal center */
+  background: linear-gradient(to bottom right, #f2f6fb, #ffffff);
   font-family: "Segoe UI", sans-serif;
+  padding: 20px;
 }
 
 /* Header */
-.simunlock-header {
-  width: 90%;
-  max-width: 600px;
+.header {
+  width: 100%;
+  max-width: 400px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -20,61 +21,58 @@
   margin-bottom: 25px;
 }
 
-.simunlock-header h2 {
-  font-size: 1.2rem;
+.header h1 {
+  font-size: 1.1rem;
   font-weight: 500;
   color: #003366;
 }
 
 .nokia-logo {
   font-weight: bold;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: #0078d7;
   letter-spacing: 0.5px;
 }
 
-/* Card Container */
-.simunlock-card {
+/* Overview Section */
+.overview-section {
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-  padding: 25px 30px;
-  width: 90%;
+  width: 100%;
   max-width: 400px;
-  text-align: center;
-}
-
-.simunlock-card h3 {
-  color: #0078d7;
-  font-size: 1.1rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  padding: 20px;
   margin-bottom: 20px;
+  text-align: left;
 }
 
-/* Overview Rows */
-.status-row {
-  display: flex;
-  justify-content: space-between;
-  margin: 8px 0;
-  color: #333;
+.overview-section h3 {
+  color: #0078d7;
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+.overview-section p {
   font-size: 0.95rem;
+  color: #333;
+  margin: 5px 0;
 }
 
-.status-row strong {
+.overview-section strong {
   color: #0078d7;
 }
 
 /* PIN Form */
 .pin-form {
-  margin-top: 25px;
+  background: #fff;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.pin-form label {
-  font-size: 0.9rem;
-  color: #555;
-  text-align: left;
+  margin-bottom: 10px;
 }
 
 .pin-form input {
@@ -93,7 +91,7 @@
 }
 
 .pin-form button {
-  margin-top: 5px;
+  margin-top: 12px;
   background: #0078d7;
   color: white;
   font-weight: 600;
@@ -110,10 +108,11 @@
   transform: scale(1.02);
 }
 
-/* Message */
+/* Feedback Message */
 .message {
-  margin-top: 15px;
+  text-align: center;
   font-weight: 500;
   font-size: 0.95rem;
   color: #333;
+  margin-top: 10px;
 }
