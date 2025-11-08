@@ -5,46 +5,43 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center;     /* Center content properly */
   height: 100vh;
   background: linear-gradient(160deg, #003366, #004c99);
   font-family: "Poppins", sans-serif;
   padding: 20px;
   text-align: center;
   color: white;
-}
-
-/* Header title */
-.signin-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  letter-spacing: 0.5px;
+  overflow: hidden;
 }
 
 /* Card styling */
 .signin-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.12);
+  padding: 30px;                 /* Increased to make it taller */
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
   width: 90%;
-  max-width: 340px;
-  backdrop-filter: blur(6px);
+  max-width: 360px;
+  min-height: 320px;             /* ⬅️ Increased card height */
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* Form elements */
 .signin-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;                     /* Slightly increased */
 }
 
 .signin-input {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.22);
   border: none;
   outline: none;
-  padding: 12px;
+  padding: 14px;
   border-radius: 10px;
   color: white;
   font-size: 1rem;
@@ -56,7 +53,7 @@
 }
 
 .signin-input:focus {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.32);
 }
 
 /* Button */
@@ -65,8 +62,8 @@
   color: white;
   border: none;
   border-radius: 10px;
-  padding: 12px;
-  font-size: 1rem;
+  padding: 14px;
+  font-size: 1.05rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.3s, transform 0.2s;
@@ -81,12 +78,12 @@
 .signin-error {
   color: #ff6b6b;
   font-size: 0.9rem;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 /* Footer */
 .signin-footer {
   font-size: 0.8rem;
   opacity: 0.8;
-  margin-top: 20px;
+  margin-top: 18px;               /* slightly increased */
 }

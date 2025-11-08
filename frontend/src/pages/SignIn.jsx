@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import "./SignIn.css"; // ✅ Import external CSS file
+import "./SignIn.css";
 
 export default function SignIn() {
   const [username, setUsername] = useState("");
@@ -18,6 +18,7 @@ export default function SignIn() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
+
       const data = await res.json();
       if (res.ok && data.success) {
         localStorage.setItem("user", JSON.stringify(data));
@@ -37,10 +38,7 @@ export default function SignIn() {
       transition={{ duration: 0.6 }}
       className="signin-container"
     >
-      {/* Header */}
-      <h1 className="signin-title">Sign In</h1>
-
-      {/* Card */}
+      {/* Sign-in Card */}
       <div className="signin-card">
         <form onSubmit={handleSubmit} className="signin-form">
           <input

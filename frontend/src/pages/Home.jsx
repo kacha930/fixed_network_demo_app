@@ -9,12 +9,13 @@ export default function Home() {
     <div
       className="home-screen"
       style={{
-        background: "linear-gradient(180deg, #02123B 0%, #031B60 100%)",
-        minHeight: "100vh",
+        background: "#E6E6E6", // Grey outer background
+        height: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         fontFamily: "Inter, sans-serif",
+        overflow: "hidden",
       }}
     >
       {/* PHONE CONTAINER */}
@@ -26,10 +27,10 @@ export default function Home() {
         style={{
           width: "100%",
           maxWidth: "390px",
-          minHeight: "700px",
-          background: "rgba(255,255,255,0.05)",
+          height: "90vh",
+          background: "linear-gradient(180deg, #02123B 0%, #031B60 100%)",
           borderRadius: "30px",
-          padding: "40px 20px",
+          padding: "28px 20px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -41,40 +42,77 @@ export default function Home() {
         <div
           style={{
             textAlign: "center",
-            marginTop: "60px",
+            marginTop: "20px",
           }}
         >
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.7 }}
+            transition={{ duration: 0.7 }}
             style={{
-              fontSize: "2.5rem",
-              fontWeight: "700",
-              color: "#fff",
-              letterSpacing: "1.5px",
+              fontSize: "1.7rem",
+              fontWeight: "600",
+              letterSpacing: "1px",
+              color: "#ffffffcc",
             }}
           >
-            Nokia
+            NOKIA
           </motion.h1>
+        </div>
 
-          <motion.h2
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{
-              delay: 1.0,
-              duration: 0.8,
-            }}
-            style={{
-              fontSize: "1.6rem",
-              fontWeight: "500",
-              color: "#80B3FF",
-              marginTop: "8px",
-              textShadow: "0 0 10px rgba(128,179,255,0.5)",
-            }}
-          >
-            WiFi
-          </motion.h2>
+        {/* wifi RIPPLE ANIMATION */}
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
+          <div style={{ position: "relative", width: 160, height: 160 }}>
+            {/* Ripple 1 */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: [0.4, 0, 0], scale: [0.6, 1.3, 1.6] }}
+              transition={{ duration: 2.6, repeat: Infinity, repeatDelay: 0.5 }}
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                borderRadius: "50%",
+                border: "2px solid rgba(128,179,255,0.5)",
+              }}
+            />
+
+            {/* Ripple 2 */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: [0.4, 0, 0], scale: [0.6, 1.3, 1.6] }}
+              transition={{ duration: 2.6, repeat: Infinity, repeatDelay: 0.5, delay: 1 }}
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                borderRadius: "50%",
+                border: "2px solid rgba(128,179,255,0.35)",
+              }}
+            />
+
+            {/* wifi LOGO */}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: [0.85, 1, 0.92], opacity: 1 }}
+              transition={{ duration: 1.8, repeat: Infinity }}
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "#80B3FF",
+                fontSize: "32px",
+                fontWeight: "700",
+                letterSpacing: "2px",
+                textShadow: "0 0 12px rgba(128,179,255,0.7)",
+              }}
+            >
+              wifi
+            </motion.div>
+          </div>
         </div>
 
         {/* BUTTONS SECTION */}
@@ -89,11 +127,11 @@ export default function Home() {
           <motion.button
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.8, duration: 0.6 }}
+            transition={{ delay: 1.4, duration: 0.6 }}
             onClick={() => nav("/signin")}
             style={{
               width: "80%",
-              padding: "14px 0",
+              padding: "12px 0",
               borderRadius: "12px",
               backgroundColor: "#fff",
               color: "#02123B",
@@ -113,11 +151,11 @@ export default function Home() {
           <motion.button
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.4, duration: 0.6 }}
+            transition={{ delay: 1.9, duration: 0.6 }}
             onClick={() => nav("/get-started")}
             style={{
               width: "80%",
-              padding: "14px 0",
+              padding: "12px 0",
               borderRadius: "12px",
               backgroundColor: "transparent",
               border: "1.5px solid #fff",
@@ -140,12 +178,12 @@ export default function Home() {
         <motion.footer
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 3.0, duration: 0.8 }}
+          transition={{ delay: 2.4, duration: 0.8 }}
           style={{
             textAlign: "center",
-            fontSize: "0.8rem",
+            fontSize: "0.75rem",
             color: "#9CB6E8",
-            marginBottom: "20px",
+            marginBottom: "8px",
           }}
         >
           © 2025 Nokia WiFi — Smart. Secure. Connected.
