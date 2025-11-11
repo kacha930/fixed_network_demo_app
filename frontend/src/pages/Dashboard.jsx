@@ -11,32 +11,46 @@ export default function Dashboard() {
   const [status, setStatus] = useState({
     sim_status: "locked",
     connection: "disconnected",
-    provider: "Unknown",
-    signal: "-",
+    provider: null,
+    signal: null,
+    network_mode: null,
+    ip_address: null,
   });
   const [showSuccess, setShowSuccess] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // Fetch backend status
+  // Fetch backend status (polling every 3s)
   useEffect(() => {
-    let timer;
-    fetch("http://localhost:5000/api/status")
-      .then((res) => res.json())
-      .then((data) => {
+    let mounted = true;
+    let poll;
+
+    async function fetchStatus() {
+      try {
+        const res = await fetch("http://localhost:5000/api/status");
+        if (!res.ok) throw new Error("Status fetch failed");
+        const data = await res.json();
+        if (!mounted) return;
+
+        // Merge fields safely
         setStatus((s) => ({ ...s, ...data }));
+
+        // If SIM locked, keep popup off until user triggers it; we still show limited network info
         if (data.sim_status === "unlocked") {
           setShowPopup(false);
-        } else {
-          timer = setTimeout(() => setShowPopup(true), 1200);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.warn("Could not fetch status:", err);
-        // If fetch fails, still show popup after a short delay for demo
-        timer = setTimeout(() => setShowPopup(true), 1200);
-      });
+      }
+    }
 
-    return () => clearTimeout(timer);
+    // initial fetch and poll
+    fetchStatus();
+    poll = setInterval(fetchStatus, 3000);
+
+    return () => {
+      mounted = false;
+      clearInterval(poll);
+    };
   }, []);
 
   // Show success banner if redirected after unlocking (example)
@@ -55,13 +69,9 @@ export default function Dashboard() {
     nav("/signin");
   }
 
+  // Allow opening network view regardless of SIM status.
+  // Network UI itself will show limited data and disable controls if SIM locked.
   function openNetworkWithAuth() {
-    // Example: require popup (password) before viewing network — mimic your flow
-    if (status.sim_status === "locked") {
-      setShowPopup(true);
-      setDrawerOpen(false);
-      return;
-    }
     setActiveTab("network");
     setDrawerOpen(false);
   }
@@ -181,7 +191,20 @@ export default function Dashboard() {
             <>
               <h2 className="page-title">Modem / Network</h2>
 
-              {/* NOTE: place a snapshot image in public/network-snapshot.png or update src */}
+              {/* show locked banner when sim locked */}
+              {status.sim_status === "locked" && (
+                <div className="info-banner warning" role="status">
+                  🔒 SIM Locked — limited network information available. Enter PIN to unlock full features.
+                  <button
+                    className="btn small"
+                    style={{ marginLeft: 8 }}
+                    onClick={() => setShowPopup(true)}
+                  >
+                    Unlock SIM
+                  </button>
+                </div>
+              )}
+
               <div className="network-card">
                 <img
                   src="/network-snapshot.png"
@@ -192,27 +215,59 @@ export default function Dashboard() {
                 <div className="network-details">
                   <div className="detail-row">
                     <div className="detail-label">Data Connection</div>
-                    <div className="detail-value">Connected</div>
+                    <div className="detail-value">
+                      {status.sim_status === "locked"
+                        ? "Unavailable (SIM Locked)"
+                        : status.connection}
+                    </div>
                   </div>
 
                   <div className="detail-row">
                     <div className="detail-label">State</div>
-                    <div className="detail-value">{status.provider || "VodaCom-SA; 4G+"}</div>
+                    <div className="detail-value">
+                      {/* If operator is provided by backend show it, otherwise show network_mode or searching */}
+                      {status.sim_status === "unlocked"
+                        ? (status.provider || status.operator || "Operator")
+                        : (status.network_mode ? `${status.network_mode} (searching)` : "Searching…")}
+                    </div>
                   </div>
 
                   <div className="detail-row">
                     <div className="detail-label">SIM Card Info</div>
-                    <div className="detail-value">SIM 1 (Ready)</div>
+                    <div className="detail-value">
+                      {status.sim_status === "locked" ? "PIN required" : "SIM 1 (Ready)"}
+                    </div>
                   </div>
 
                   <div className="detail-row">
                     <div className="detail-label">Signal</div>
-                    <div className="detail-value">{status.signal || "-65 dBm"}</div>
+                    <div className="detail-value">
+                      {typeof status.signal === "number" ? `${status.signal} dBm` : (status.signal || "-")}
+                    </div>
                   </div>
 
+                  {status.sim_status === "unlocked" && status.ip_address && (
+                    <div className="detail-row">
+                      <div className="detail-label">IP Address</div>
+                      <div className="detail-value">{status.ip_address}</div>
+                    </div>
+                  )}
+
                   <div className="network-actions">
-                    <button className="btn small" onClick={() => alert("Change network (demo)")}>Change</button>
-                    <button className="btn outline small" onClick={() => alert("Advanced (demo)")}>Advanced</button>
+                    <button
+                      className="btn small"
+                      disabled={status.sim_status === "locked"}
+                      onClick={() => alert("Change network (demo)")}
+                    >
+                      Change
+                    </button>
+                    <button
+                      className="btn outline small"
+                      disabled={status.sim_status === "locked"}
+                      onClick={() => alert("Advanced (demo)")}
+                    >
+                      Advanced
+                    </button>
                   </div>
                 </div>
               </div>

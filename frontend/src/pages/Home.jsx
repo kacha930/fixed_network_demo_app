@@ -1,15 +1,16 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-
+import logo from "../assets/nokia-logo.png"; // <-- use your uploaded logo file here
+ 
 export default function Home() {
   const nav = useNavigate();
-
+ 
   return (
     <div
       className="home-screen"
       style={{
-        background: "#E6E6E6", // Grey outer background
+        background: "#E6E6E6", // Grey outer background (like phone mockup padding)
         height: "100vh",
         display: "flex",
         alignItems: "center",
@@ -38,30 +39,32 @@ export default function Home() {
           position: "relative",
         }}
       >
-        {/* TOP LOGO AREA */}
+        {/* ✅ TOP LOGO AREA */}
+        <div style={{ textAlign: "center", marginTop: "8px" }}>
+          <motion.img
+            src={logo}
+            alt="Nokia Logo"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            style={{
+              width: "130px",
+              marginBottom: "4px",
+              filter: "brightness(1.3)",
+            }}
+          />
+        </div>
+ 
+        {/* 🟦 WiFi RIPPLE ANIMATION */}
         <div
           style={{
-            textAlign: "center",
-            marginTop: "20px",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            flexGrow: 1,
+            alignItems: "center",
           }}
         >
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            style={{
-              fontSize: "1.7rem",
-              fontWeight: "600",
-              letterSpacing: "1px",
-              color: "#ffffffcc",
-            }}
-          >
-            NOKIA
-          </motion.h1>
-        </div>
-
-        {/* wifi RIPPLE ANIMATION */}
-        <div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
           <div style={{ position: "relative", width: 160, height: 160 }}>
             {/* Ripple 1 */}
             <motion.div
@@ -76,12 +79,16 @@ export default function Home() {
                 border: "2px solid rgba(128,179,255,0.5)",
               }}
             />
-
             {/* Ripple 2 */}
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: [0.4, 0, 0], scale: [0.6, 1.3, 1.6] }}
-              transition={{ duration: 2.6, repeat: Infinity, repeatDelay: 0.5, delay: 1 }}
+              transition={{
+                duration: 2.6,
+                repeat: Infinity,
+                repeatDelay: 0.5,
+                delay: 1,
+              }}
               style={{
                 position: "absolute",
                 width: "100%",
@@ -90,8 +97,7 @@ export default function Home() {
                 border: "2px solid rgba(128,179,255,0.35)",
               }}
             />
-
-            {/* wifi LOGO */}
+            {/* WiFi Text */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: [0.85, 1, 0.92], opacity: 1 }}
@@ -108,20 +114,22 @@ export default function Home() {
                 fontWeight: "700",
                 letterSpacing: "2px",
                 textShadow: "0 0 12px rgba(128,179,255,0.7)",
+                textTransform: "capitalize",
               }}
             >
-              wifi
+              WiFi
             </motion.div>
           </div>
         </div>
-
-        {/* BUTTONS SECTION */}
+ 
+        {/* 🔘 BUTTONS SECTION */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             gap: "14px",
+            marginBottom: "40px",
           }}
         >
           <motion.button
@@ -147,7 +155,7 @@ export default function Home() {
           >
             Sign In
           </motion.button>
-
+ 
           <motion.button
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -173,8 +181,8 @@ export default function Home() {
             Get Started
           </motion.button>
         </div>
-
-        {/* FOOTER */}
+ 
+        {/* 📜 FOOTER */}
         <motion.footer
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
