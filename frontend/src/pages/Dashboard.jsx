@@ -89,7 +89,7 @@ export default function Dashboard() {
       <aside className={`side-drawer ${drawerOpen ? "open" : ""}`} aria-hidden={!drawerOpen}>
         <div className="drawer-top">
           <div className="drawer-brand">
-            <div className="brand-logo">NOKIA</div>
+            <div className="brand-logo"></div>
             <div className="brand-sub">WiFi</div>
           </div>
         </div>
@@ -149,7 +149,7 @@ export default function Dashboard() {
         </button>
 
         <div className="header-title">
-          <div className="title-main">Nokia</div>
+          <div className="title-main"></div>
           <div className="title-sub">WiFi</div>
         </div>
       </header>
