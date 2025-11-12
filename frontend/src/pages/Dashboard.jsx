@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Popup from "../components/Popup";
@@ -7,19 +6,20 @@ import "./Dashboard.css";
 export default function Dashboard() {
   const nav = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
+  const [popupShownOnce, setPopupShownOnce] = useState(false);
   const [activeTab, setActiveTab] = useState("home");
   const [status, setStatus] = useState({
     sim_status: "locked",
     connection: "disconnected",
-    provider: null,
-    signal: null,
-    network_mode: null,
+    operator: null,
+    signal_strength: null,
+    connection_type: null,
     ip_address: null,
   });
   const [showSuccess, setShowSuccess] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // Fetch backend status (polling every 3s)
+  // 🔄 Poll backend every 3 seconds
   useEffect(() => {
     let mounted = true;
     let poll;
@@ -30,11 +30,8 @@ export default function Dashboard() {
         if (!res.ok) throw new Error("Status fetch failed");
         const data = await res.json();
         if (!mounted) return;
+        setStatus((prev) => ({ ...prev, ...data }));
 
-        // Merge fields safely
-        setStatus((s) => ({ ...s, ...data }));
-
-        // If SIM locked, keep popup off until user triggers it; we still show limited network info
         if (data.sim_status === "unlocked") {
           setShowPopup(false);
         }
@@ -43,7 +40,6 @@ export default function Dashboard() {
       }
     }
 
-    // initial fetch and poll
     fetchStatus();
     poll = setInterval(fetchStatus, 3000);
 
@@ -53,7 +49,15 @@ export default function Dashboard() {
     };
   }, []);
 
-  // Show success banner if redirected after unlocking (example)
+  // ✅ Show popup automatically on Home tab when SIM is locked
+  useEffect(() => {
+    if (status.sim_status === "locked" && activeTab === "home" && !popupShownOnce) {
+      setShowPopup(true);
+      setPopupShownOnce(true);
+    }
+  }, [status.sim_status, activeTab, popupShownOnce]);
+
+  // ✅ Connection success banner
   useEffect(() => {
     if (localStorage.getItem("connectionSuccess") === "true") {
       setShowSuccess(true);
@@ -63,30 +67,22 @@ export default function Dashboard() {
     }
   }, []);
 
-  // Helpers
   function logout() {
     localStorage.removeItem("user");
     nav("/signin");
   }
 
-  // Allow opening network view regardless of SIM status.
-  // Network UI itself will show limited data and disable controls if SIM locked.
-  function openNetworkWithAuth() {
-    setActiveTab("network");
-    setDrawerOpen(false);
-  }
-
   return (
     <div className="dashboard-root">
-      {/* overlay when drawer open */}
+      {/* Drawer overlay */}
       <div
         className={`drawer-overlay ${drawerOpen ? "visible" : ""}`}
         onClick={() => setDrawerOpen(false)}
         aria-hidden={!drawerOpen}
       />
 
-      {/* side drawer */}
-      <aside className={`side-drawer ${drawerOpen ? "open" : ""}`} aria-hidden={!drawerOpen}>
+      {/* Side Drawer */}
+      <aside className={`side-drawer ${drawerOpen ? "open" : ""}`}>
         <div className="drawer-top">
           <div className="drawer-brand">
             <div className="brand-logo"></div>
@@ -108,7 +104,8 @@ export default function Dashboard() {
           <button
             className={activeTab === "network" ? "drawer-item active" : "drawer-item"}
             onClick={() => {
-              openNetworkWithAuth();
+              setActiveTab("network");
+              setDrawerOpen(false);
             }}
           >
             Network
@@ -124,24 +121,17 @@ export default function Dashboard() {
             Settings
           </button>
 
-          <button
-            className="drawer-item logout"
-            onClick={() => {
-              logout();
-            }}
-          >
+          <button className="drawer-item logout" onClick={logout}>
             Logout
           </button>
         </nav>
       </aside>
 
-      {/* top header */}
+      {/* Header */}
       <header className="dashboard-header">
         <button
           className={`hamburger ${drawerOpen ? "open" : ""}`}
           onClick={() => setDrawerOpen((v) => !v)}
-          aria-label={drawerOpen ? "Close menu" : "Open menu"}
-          aria-expanded={drawerOpen}
         >
           <span />
           <span />
@@ -149,34 +139,45 @@ export default function Dashboard() {
         </button>
 
         <div className="header-title">
-          <div className="title-main"></div>
-          <div className="title-sub">WiFi</div>
+          <div className="title-main">{status.operator ? status.operator : "Nokia Gateway"}</div>
+          <div className="title-sub">
+            {status.sim_status === "unlocked"
+              ? `${status.operator || "Operator"} — ${status.connection_type || "Connected"}`
+              : "WiFi"}
+          </div>
         </div>
       </header>
 
-      {/* main content */}
+      {/* Main content */}
       <main className={`dashboard-content ${drawerOpen ? "shifted" : ""}`}>
-        {/* success banner */}
         {showSuccess && <div className="success-banner">✅ Connected successfully</div>}
 
-        {/* popup (your existing popup sits above everything) */}
+        {/* Popup on Home */}
         {showPopup && status.sim_status === "locked" && (
           <div className="popup-layer">
             <Popup onClose={() => setShowPopup(false)} />
           </div>
         )}
 
-        {/* content per tab */}
         <section className="content-area">
+          {/* ---------------- HOME TAB ---------------- */}
           {activeTab === "home" && (
             <>
               <h2 className="page-title">Welcome</h2>
-              <p className="muted">Smart. Secure. Connected.</p>
+              <p className="muted">
+                {status.sim_status === "unlocked"
+                  ? `Connected to ${status.operator} (${status.connection_type})`
+                  : "Smart. Secure. Connected."}
+              </p>
 
               <div className="cards-row">
                 <div className="card">
                   <div className="card-title">Connection</div>
-                  <div className="card-value">{status.connection}</div>
+                  <div className="card-value">
+                    {status.connection === "connected"
+                      ? `${status.operator || "Safaricom"} — ${status.connection_type || ""}`
+                      : "Disconnected"}
+                  </div>
                 </div>
 
                 <div className="card">
@@ -187,14 +188,14 @@ export default function Dashboard() {
             </>
           )}
 
+          {/* ---------------- NETWORK TAB ---------------- */}
           {activeTab === "network" && (
             <>
               <h2 className="page-title">Modem / Network</h2>
 
-              {/* show locked banner when sim locked */}
               {status.sim_status === "locked" && (
-                <div className="info-banner warning" role="status">
-                  🔒 SIM Locked — limited network information available. Enter PIN to unlock full features.
+                <div className="info-banner warning">
+                  🔒 SIM Locked — limited info. Enter PIN to unlock full features.
                   <button
                     className="btn small"
                     style={{ marginLeft: 8 }}
@@ -206,52 +207,51 @@ export default function Dashboard() {
               )}
 
               <div className="network-card">
-                <img
-                  src="/network-snapshot.png"
-                  alt="Network snapshot"
-                  className="network-image"
-                />
+                <img src="/network-snapshot.png" alt="Network snapshot" className="network-image" />
 
                 <div className="network-details">
                   <div className="detail-row">
-                    <div className="detail-label">Data Connection</div>
+                    <div className="detail-label">Operator</div>
                     <div className="detail-value">
-                      {status.sim_status === "locked"
-                        ? "Unavailable (SIM Locked)"
-                        : status.connection}
-                    </div>
-                  </div>
-
-                  <div className="detail-row">
-                    <div className="detail-label">State</div>
-                    <div className="detail-value">
-                      {/* If operator is provided by backend show it, otherwise show network_mode or searching */}
                       {status.sim_status === "unlocked"
-                        ? (status.provider || status.operator || "Operator")
-                        : (status.network_mode ? `${status.network_mode} (searching)` : "Searching…")}
+                        ? status.operator || "Safaricom"
+                        : "Searching..."}
                     </div>
                   </div>
 
                   <div className="detail-row">
-                    <div className="detail-label">SIM Card Info</div>
+                    <div className="detail-label">Connection Type</div>
                     <div className="detail-value">
-                      {status.sim_status === "locked" ? "PIN required" : "SIM 1 (Ready)"}
+                      {status.sim_status === "unlocked"
+                        ? status.connection_type || "-"
+                        : "Unavailable"}
                     </div>
                   </div>
 
                   <div className="detail-row">
-                    <div className="detail-label">Signal</div>
+                    <div className="detail-label">Signal Strength</div>
                     <div className="detail-value">
-                      {typeof status.signal === "number" ? `${status.signal} dBm` : (status.signal || "-")}
+                      {status.sim_status === "unlocked"
+                        ? status.signal_strength || "-"
+                        : "N/A"}
                     </div>
                   </div>
 
-                  {status.sim_status === "unlocked" && status.ip_address && (
-                    <div className="detail-row">
-                      <div className="detail-label">IP Address</div>
-                      <div className="detail-value">{status.ip_address}</div>
+                  <div className="detail-row">
+                    <div className="detail-label">IP Address</div>
+                    <div className="detail-value">
+                      {status.sim_status === "unlocked"
+                        ? status.ip_address || "-"
+                        : "Unavailable"}
                     </div>
-                  )}
+                  </div>
+
+                  <div className="detail-row">
+                    <div className="detail-label">SIM Status</div>
+                    <div className="detail-value">
+                      {status.sim_status === "locked" ? "PIN Required" : "Safaricom — Connected"}
+                    </div>
+                  </div>
 
                   <div className="network-actions">
                     <button
@@ -274,6 +274,7 @@ export default function Dashboard() {
             </>
           )}
 
+          {/* ---------------- SETTINGS TAB ---------------- */}
           {activeTab === "settings" && (
             <>
               <h2 className="page-title">Settings</h2>
@@ -282,14 +283,14 @@ export default function Dashboard() {
                   <span>Auto-connect</span>
                   <input type="checkbox" defaultChecked />
                 </label>
-
                 <label className="setting-row">
                   <span>Save networks</span>
                   <input type="checkbox" />
                 </label>
-
                 <div style={{ marginTop: 12 }}>
-                  <button className="btn" onClick={() => alert("Save settings (demo)")}>Save</button>
+                  <button className="btn" onClick={() => alert("Save settings (demo)")}>
+                    Save
+                  </button>
                 </div>
               </div>
             </>
