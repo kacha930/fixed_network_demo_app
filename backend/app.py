@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 import json
 import os
+import random
 
 app = Flask(__name__, static_folder="../frontend/dist", template_folder="templates")
 CORS(app)
@@ -13,7 +14,11 @@ state = {
     "sim_status": "locked",           # can be: locked, unlocked, blocked, permanently_locked
     "remaining_attempts": 3,          # PIN attempts left
     "puk_attempts": 3,                # PUK attempts left
-    "connection": "disconnected"
+    "connection": "disconnected",
+    "operator": None,
+    "signal_strength": None,
+    "ip_address": None,
+    "connection_type": None
 }
 
 CORRECT_PIN = "1234"
@@ -67,6 +72,18 @@ def login():
 # ---------------------------------------------
 @app.route("/api/status")
 def status():
+    # Simulate signal quality and IP when connected
+    if state["connection"] == "connected" and state["sim_status"] == "unlocked":
+        state["operator"] = "Safaricom"
+        state["signal_strength"] = random.choice(["Excellent", "Good", "Fair", "Poor"])
+        state["ip_address"] = "192.168.1." + str(random.randint(2, 254))
+        state["connection_type"] = random.choice(["4G", "5G"])
+    else:
+        state["operator"] = None
+        state["signal_strength"] = None
+        state["ip_address"] = None
+        state["connection_type"] = None
+
     return jsonify(state)
 
 # ---------------------------------------------
@@ -99,11 +116,18 @@ def unlock_sim():
             "sim_status": "unlocked",
             "connection": "connected",
             "remaining_attempts": 3,
-            "puk_attempts": 3
+            "puk_attempts": 3,
+            "operator": "Safaricom",
+            "signal_strength": random.choice(["Excellent", "Good", "Fair"]),
+            "ip_address": "192.168.1." + str(random.randint(2, 254)),
+            "connection_type": random.choice(["4G", "5G"])
         })
         return jsonify({
             "status": "success",
-            "message": "SIM unlocked successfully."
+            "message": "SIM unlocked successfully.",
+            "operator": state["operator"],
+            "ip_address": state["ip_address"],
+            "connection_type": state["connection_type"]
         })
 
     # ❌ Incorrect PIN
@@ -154,11 +178,18 @@ def unlock_puk():
             "sim_status": "unlocked",
             "connection": "connected",
             "remaining_attempts": 3,
-            "puk_attempts": 3
+            "puk_attempts": 3,
+            "operator": "Safaricom",
+            "signal_strength": random.choice(["Excellent", "Good", "Fair"]),
+            "ip_address": "192.168.1." + str(random.randint(2, 254)),
+            "connection_type": random.choice(["4G", "5G"])
         })
         return jsonify({
             "status": "success",
-            "message": "SIM unlocked via PUK. New PIN set successfully."
+            "message": "SIM unlocked via PUK. New PIN set successfully.",
+            "operator": state["operator"],
+            "ip_address": state["ip_address"],
+            "connection_type": state["connection_type"]
         })
 
     # ❌ Incorrect PUK
@@ -176,17 +207,6 @@ def unlock_puk():
     }), 403
 
 # ---------------------------------------------
-# HTML ROUTES
-# ---------------------------------------------
-@app.route("/login")
-def login_page():
-    return render_template("login.html")
-
-@app.route("/puk")
-def puk_page():
-    return render_template("puk.html")
-
-# ---------------------------------------------
 # RESET SIM
 # ---------------------------------------------
 @app.route("/reset")
@@ -195,7 +215,11 @@ def reset():
         "sim_status": "locked",
         "remaining_attempts": 3,
         "puk_attempts": 3,
-        "connection": "disconnected"
+        "connection": "disconnected",
+        "operator": None,
+        "signal_strength": None,
+        "ip_address": None,
+        "connection_type": None
     })
     return jsonify({"status": "reset", "message": "SIM reset to locked"})
 
